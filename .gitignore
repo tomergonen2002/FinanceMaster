@@ -42,3 +42,14 @@ replay_pid*
 
 # OS
 .DS_Store
+
+# IntelliJ / JetBrains
+# ignore workspace and other local config caches
+*.iws
+out/
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/dictionaries/
+.idea/caches/
+.idea/usage.statistics.xml
+.idea/assetWizard.xml
