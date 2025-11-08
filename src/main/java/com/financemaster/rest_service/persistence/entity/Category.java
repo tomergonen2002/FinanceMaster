@@ -1,4 +1,4 @@
-package com.financemaster.rest_service;
+package com.financemaster.rest_service.persistence.entity;
 
 public class Category {
     private Long id;
