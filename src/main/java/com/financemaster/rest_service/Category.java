@@ -1,4 +1,4 @@
-package com.example.rest_service;
+package com.financemaster.rest_service;
 
 public class Category {
     private Long id;

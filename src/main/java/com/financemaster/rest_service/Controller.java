@@ -1,4 +1,4 @@
-package com.example.rest_service;
+package com.financemaster.rest_service;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
