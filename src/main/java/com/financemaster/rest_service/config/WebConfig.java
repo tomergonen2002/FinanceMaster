@@ -22,8 +22,8 @@ public class WebConfig implements WebMvcConfigurer {
             allowedOrigins = frontendUrl.split("\\s*,\\s*");
         }
 
-        registry.addMapping("/**")
-                .allowedOrigins(allowedOrigins)
+    registry.addMapping("/**")
+        .allowedOriginPatterns(allowedOrigins)
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .exposedHeaders("Content-Disposition")

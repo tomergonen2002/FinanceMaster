@@ -1,10 +1,11 @@
 package com.financemaster.rest_service.persistence.entity;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 @Table(name = "categories")
@@ -15,6 +16,10 @@ public class Category {
 
     private String name;
     private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Category() {}
 
@@ -31,4 +36,7 @@ public class Category {
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
+
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 }

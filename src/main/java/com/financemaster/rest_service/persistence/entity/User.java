@@ -1,5 +1,6 @@
 package com.financemaster.rest_service.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,6 +16,10 @@ public class User {
 
     private String name;
     private String email;
+    
+    // Store password; marked write-only so it's accepted in requests but never returned in responses
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String password;
 
     public User() {}
 
@@ -31,4 +36,7 @@ public class User {
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 }
