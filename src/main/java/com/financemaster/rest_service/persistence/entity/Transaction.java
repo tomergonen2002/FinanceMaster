@@ -1,13 +1,28 @@
 package com.financemaster.rest_service.persistence.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "transactions")
 public class Transaction {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String type;
+
+    private String type; // Einnahme oder Ausgabe
     private Double amount;
     private String description;
     private LocalDate date;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
     private Category category;
 
     public Transaction() {}

@@ -8,37 +8,25 @@ import org.springframework.web.bind.annotation.RestController;
 import com.financemaster.rest_service.persistence.entity.Category;
 import com.financemaster.rest_service.persistence.entity.Transaction;
 import com.financemaster.rest_service.persistence.entity.User;
+import com.financemaster.rest_service.persistence.repository.CategoryRepository;
+import com.financemaster.rest_service.persistence.repository.TransactionRepository;
+import com.financemaster.rest_service.persistence.repository.UserRepository;
 
 import java.util.List;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
 public class Controller {
 
-    private final List<Category> categories = Collections.synchronizedList(new ArrayList<>());
-    private final List<Transaction> transactions = Collections.synchronizedList(new ArrayList<>());
-    private final List<User> users = Collections.synchronizedList(new ArrayList<>());
+    private final CategoryRepository categoryRepository;
+    private final TransactionRepository transactionRepository;
+    private final UserRepository userRepository;
 
-    private final AtomicLong catId = new AtomicLong(1);
-    private final AtomicLong txId = new AtomicLong(1);
-    private final AtomicLong userId = new AtomicLong(1);
-
-    public Controller() {
-        Category c1 = new Category("Lebensmittel", "Einkaufen"); c1.setId(catId.getAndIncrement());
-        Category c2 = new Category("Gehalt", "Monatliches Gehalt"); c2.setId(catId.getAndIncrement());
-        Category c3 = new Category("Transport", ""); c3.setId(catId.getAndIncrement());
-        categories.add(c1); categories.add(c2); categories.add(c3);
-
-        Transaction t1 = new Transaction("expense", 34.90, "Lebensmittel", "2025-11-01", c1); t1.setId(txId.getAndIncrement());
-        Transaction t2 = new Transaction("income", 1500.00, "Gehalt", "2025-11-03", c2); t2.setId(txId.getAndIncrement());
-        Transaction t3 = new Transaction("expense", 2.80, "Ticket", "2025-11-04", c3); t3.setId(txId.getAndIncrement());
-        transactions.add(t1); transactions.add(t2); transactions.add(t3);
-
-        User u1 = new User("Tomer Gonen", "tomer@example.com"); u1.setId(userId.getAndIncrement());
-        User u2 = new User("Kolja Schollmeyer", "kolja@example.com"); u2.setId(userId.getAndIncrement());
-        users.add(u1); users.add(u2);
+    public Controller(CategoryRepository categoryRepository,
+                      TransactionRepository transactionRepository,
+                      UserRepository userRepository) {
+        this.categoryRepository = categoryRepository;
+        this.transactionRepository = transactionRepository;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/")
@@ -55,37 +43,31 @@ public class Controller {
 
     @GetMapping("/categories")
     public List<Category> getCategories() {
-        return categories;
+        return categoryRepository.findAll();
     }
 
     @PostMapping("/categories")
     public Category createCategory(@RequestBody Category c) {
-        c.setId(catId.getAndIncrement());
-        categories.add(c);
-        return c;
+        return categoryRepository.save(c);
     }
 
     @GetMapping("/transactions")
     public List<Transaction> getTransactions() {
-        return transactions;
+        return transactionRepository.findAll();
     }
 
     @PostMapping("/transactions")
     public Transaction createTransaction(@RequestBody Transaction t) {
-        t.setId(txId.getAndIncrement());
-        transactions.add(t);
-        return t;
+        return transactionRepository.save(t);
     }
 
     @GetMapping("/users")
     public List<User> getUsers() {
-        return users;
+        return userRepository.findAll();
     }
 
     @PostMapping("/users")
     public User createUser(@RequestBody User u) {
-        u.setId(userId.getAndIncrement());
-        users.add(u);
-        return u;
+        return userRepository.save(u);
     }
 }
