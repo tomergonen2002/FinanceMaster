@@ -8,15 +8,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    // FRONTEND_URL should be set in Render or left empty for local development
-    @Value("${FRONTEND_URL:}")
+    // Lies zuerst application.properties key 'frontend.url', fallback auf env 'FRONTEND_URL', sonst leer
+    @Value("${frontend.url:${FRONTEND_URL:}}")
     private String frontendUrl;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         String[] allowedOrigins;
         if (frontendUrl == null || frontendUrl.isBlank()) {
-            allowedOrigins = new String[] { "http://localhost:5173", "http://localhost:3000" };
+            // Entwicklungs-Defaults
+            allowedOrigins = new String[] {"http://localhost:5173", "http://localhost:3000"};
         } else {
             allowedOrigins = frontendUrl.split("\\s*,\\s*");
         }
@@ -24,6 +25,8 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins(allowedOrigins)
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .exposedHeaders("Content-Disposition")
                 .allowCredentials(true)
                 .maxAge(3600);
     }
