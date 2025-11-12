@@ -33,14 +33,6 @@ public class Transaction {
 
     public Transaction() {}
 
-    public Transaction(String type, Double amount, String description, String date, Category category) {
-        this.type = type;
-        this.amount = amount;
-        this.description = description;
-        this.date = LocalDate.parse(date);
-        this.category = category;
-    }
-
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
