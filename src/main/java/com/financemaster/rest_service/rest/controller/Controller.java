@@ -34,7 +34,7 @@ public class Controller {
     @GetMapping("/")
     public String index() {
     return "<html><head><title>FinanceMaster API</title><style>body{font-family:system-ui,Arial,sans-serif;margin:2rem;line-height:1.4}a{color:#0645ad;text-decoration:none}a:hover{text-decoration:underline}h1{margin-top:0}ul{list-style:disc;margin-left:1.5rem}</style></head><body>" +
-        "<h1>FinanceMaster API</h1>" +
+        "<h1>Welcome to FinanceMaster!</h1>" +
         "<ul>" +
         "<li><a href=\"/categories\">/categories</a></li>" +
         "<li><a href=\"/transactions\">/transactions</a></li>" +
