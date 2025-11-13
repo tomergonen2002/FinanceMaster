@@ -6,6 +6,5 @@ import java.util.List;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 	List<Category> findByUserId(Long userId);
-
 	void deleteByUserId(Long userId);
 }

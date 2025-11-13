@@ -2,6 +2,7 @@ package com.financemaster.rest_service.persistence.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,6 +16,7 @@ public class User {
     private Long id;
 
     private String name;
+    @Column(unique = true)
     private String email;
     
     // Store password; marked write-only so it's accepted in requests but never returned in responses

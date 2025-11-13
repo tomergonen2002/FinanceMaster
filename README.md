@@ -4,6 +4,8 @@ Team Mitglieder: Tomer Gonen, Kolja Schollmeyer
 Wir entwickeln eine Finanzplattform zur Verwaltung von Einnahmen und Ausgaben.
 
 Zum Frontend-Repository: https://github.com/KoljaSchollmeyer/frontend
+BE Render Seite: https://financemaster-8cou.onrender.com
+FE Render Seite: https://frontend-7vbb.onrender.com
 
 ### Milestones
 
