@@ -23,11 +23,6 @@ public class Category {
 
     public Category() {}
 
-    public Category(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
-
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

@@ -13,21 +13,18 @@ public class WebConfig implements WebMvcConfigurer {
     private String frontendUrl;
 
     @Override
+    @SuppressWarnings("null")
     public void addCorsMappings(CorsRegistry registry) {
-        String[] allowedOrigins;
-        if (frontendUrl == null || frontendUrl.isBlank()) {
-            // Entwicklungs-Defaults
-            allowedOrigins = new String[] {"http://localhost:5173", "http://localhost:3000"};
-        } else {
-            allowedOrigins = frontendUrl.split("\\s*,\\s*");
-        }
+    final String[] allowedOrigins = (frontendUrl == null || frontendUrl.isBlank())
+        ? new String[] {"http://localhost:5173", "http://localhost:3000"}
+        : frontendUrl.split("\\s*,\\s*");
 
     registry.addMapping("/**")
         .allowedOriginPatterns(allowedOrigins)
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
-                .exposedHeaders("Content-Disposition")
-                .allowCredentials(true)
-                .maxAge(3600);
+        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+        .allowedHeaders("*")
+        .exposedHeaders("Content-Disposition")
+        .allowCredentials(true)
+        .maxAge(3600);
     }
 }
