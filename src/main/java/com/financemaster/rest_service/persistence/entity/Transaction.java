@@ -1,6 +1,5 @@
 package com.financemaster.rest_service.persistence.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,11 +15,9 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "tx_type")
     private String type; // Einnahme oder Ausgabe
     private Double amount;
     private String description;
-    @Column(name = "tx_date")
     private LocalDate date;
 
     @ManyToOne

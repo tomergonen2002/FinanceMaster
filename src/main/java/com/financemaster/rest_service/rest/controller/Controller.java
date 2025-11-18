@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.dao.DataIntegrityViolationException;
 
 import com.financemaster.rest_service.persistence.entity.Category;
 import com.financemaster.rest_service.persistence.entity.Transaction;
@@ -18,7 +17,6 @@ import com.financemaster.rest_service.persistence.repository.CategoryRepository;
 import com.financemaster.rest_service.persistence.repository.TransactionRepository;
 import com.financemaster.rest_service.persistence.repository.UserRepository;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class Controller {
@@ -42,34 +40,57 @@ public class Controller {
                         <html>
                             <head>
                                 <meta charset=\"utf-8\" />
-                                <title>FinanceMaster API</title>
+                                <title>FinanceMaster</title>
                             </head>
                             <body>
-                                <h1>FinanceMaster API</h1>
+                                <h1>FinanceMaster</h1>
                                 <ul>
                                     <li><a href=\"/categories\">/categories</a></li>
                                     <li><a href=\"/transactions\">/transactions</a></li>
                                     <li><a href=\"/users\">/users</a></li>
+                                    <li><a href=\"/categories?userId=\">/categories?userId=</a></li>
+                                    <li><a href=\"/transactions?userId=\">/transactions?userId=</a></li>
                                 </ul>
                             </body>
                         </html>
                         """;
     }
 
+    /* GET (/categories, /transactions, /users)
+    *  Ohne userId: alle Einträge zurückgeben
+    *  Mit userId: nur Einträge des Users zurückgeben */
     @GetMapping("/categories")
     public List<Category> getCategories(@RequestParam(name = "userId", required = false) Long userId) {
-        return (userId != null) ? categoryRepository.findByUserId(userId) : categoryRepository.findAll();
-    }
-
-    @PostMapping("/categories")
-    public Category createCategory(@RequestBody Category c) {
-        requireUserId(c.getUser());
-        return categoryRepository.save(c);
+        if (userId == null) {
+            return categoryRepository.findAll();
+        }
+        return categoryRepository.findByUserId(userId);
     }
 
     @GetMapping("/transactions")
     public List<Transaction> getTransactions(@RequestParam(name = "userId", required = false) Long userId) {
-        return (userId != null) ? transactionRepository.findByUserId(userId) : transactionRepository.findAll();
+        if (userId == null) {
+            return transactionRepository.findAll();
+        }
+        return transactionRepository.findByUserId(userId);
+    }
+
+    @GetMapping("/users")
+    public Object getUsers(@RequestParam(name = "id", required = false) Long userId) {
+        if (userId == null) {
+            return userRepository.findAll();
+        }
+        return userRepository.findById(userId);
+    }
+
+    /* POST (/categories, /transactions, /users)
+    *  Kategorien müssen userId haben
+    *  Transaktionen müssen categoryId + userId haben
+    *  Users müssen eine neue Email haben (unique constraint) */
+    @PostMapping("/categories")
+    public Category createCategory(@RequestBody Category c) {
+        requireUserId(c.getUser());
+        return categoryRepository.save(c);
     }
 
     @PostMapping("/transactions")
@@ -79,32 +100,19 @@ public class Controller {
         return transactionRepository.save(t);
     }
 
-    @DeleteMapping("/transactions")
-    public void deleteTransactionsByUser(@RequestParam(name = "userId") Long userId) {
-        transactionRepository.deleteByUserId(userId);
-    }
-
-    @GetMapping("/users")
-    public List<User> getUsers() {
-        return userRepository.findAll();
-    }
-
-    @GetMapping("/users/search")
-    public User getUserByEmail(@RequestParam(name = "email") String email) {
-        Optional<User> u = userRepository.findByEmailIgnoreCase(email);
-        return u.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found"));
-    }
-
     @PostMapping("/users")
-    @SuppressWarnings("null")
     public User createUser(@RequestBody User u) {
-        try {
-            return userRepository.save(u);
-        } catch (DataIntegrityViolationException ex) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "email already exists");
+        if (userRepository.findByEmailIgnoreCase(u.getEmail()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
         }
+        return userRepository.save(u);
     }
 
+    /* DELETE (/categories, /categories/{id}, /transactions, /transactions/{id})
+    *  deleteCategoriesByUser -> löscht zuerst alle Transaktionen, dann Kategorien
+    *  deleteCategory -> löscht nur eine Kategorie
+    *  deleteTransactionsByUser -> löscht alle Transaktionen
+    *  deleteTransaction -> löscht nur eine Transaktion */
     @DeleteMapping("/categories")
     public void deleteCategoriesByUser(@RequestParam(name = "userId") Long userId) {
         transactionRepository.deleteByUserId(userId);
@@ -112,28 +120,28 @@ public class Controller {
     }
 
     @DeleteMapping("/categories/{id}")
-    @SuppressWarnings("null")
-    public void deleteCategory(@PathVariable Long id, @RequestParam(name = "userId") Long userId) {
-        Category c = categoryRepository.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "category not found"));
-        if (!c.getUser().getId().equals(userId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "not your category");
+    public void deleteCategory(@PathVariable("id") long id) {
+        if (!categoryRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "category not found");
         }
         categoryRepository.deleteById(id);
     }
 
+    @DeleteMapping("/transactions")
+    public void deleteTransactionsByUser(@RequestParam(name = "userId") Long userId) {
+        transactionRepository.deleteByUserId(userId);
+    }
+
     @DeleteMapping("/transactions/{id}")
-    @SuppressWarnings("null")
-    public void deleteTransaction(@PathVariable Long id, @RequestParam(name = "userId") Long userId) {
-        Transaction t = transactionRepository.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "transaction not found"));
-        if (!t.getUser().getId().equals(userId)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "not your transaction");
+    public void deleteTransaction(@PathVariable("id") long id) {
+        if (!transactionRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "transaction not found");
         }
         transactionRepository.deleteById(id);
     }
 
-    // --- helpers -----------------------------------------------------------
+    /* Helper Methoden 
+     * Stellen sicher, dass notwendige IDs vorhanden sind */
     private void requireUserId(User u) {
         if (u == null || u.getId() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user.id is required");

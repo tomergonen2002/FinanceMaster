@@ -16,10 +16,9 @@ public class User {
     private Long id;
 
     private String name;
-    @Column(unique = true)
+    @Column(unique = true) // Eindeutige Email 
     private String email;
     
-    // Store password; marked write-only so it's accepted in requests but never returned in responses
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
