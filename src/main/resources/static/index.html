@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>FinanceMaster API</title>
+</head>
+<body>
+    <h1>FinanceMaster API</h1>
+    <p>REST API für Finanzverwaltung</p>
+    
+    <hr>
+    
+    <h2>Authentication</h2>
+    <ul>
+        <li><strong>POST</strong> /auth/register - Benutzer registrieren</li>
+        <li><strong>POST</strong> /auth/login - Benutzer anmelden</li>
+        <li><strong>GET</strong> <a href="/auth/me">/auth/me</a> - Aktuellen Benutzer abrufen (Auth erforderlich)</li>
+        <li><strong>POST</strong> /auth/logout - Benutzer abmelden (Auth erforderlich)</li>
+    </ul>
+    
+    <h2>Categories</h2>
+    <ul>
+        <li><strong>GET</strong> <a href="/categories">/categories</a> - Alle Kategorien abrufen (Auth erforderlich)</li>
+        <li><strong>POST</strong> /categories - Kategorie erstellen (Auth erforderlich)</li>
+        <li><strong>DELETE</strong> /categories/{id} - Kategorie löschen (Auth erforderlich)</li>
+        <li><strong>DELETE</strong> /categories - Alle Kategorien löschen (Auth erforderlich)</li>
+    </ul>
+    
+    <h2>Transactions</h2>
+    <ul>
+        <li><strong>GET</strong> <a href="/transactions">/transactions</a> - Alle Transaktionen abrufen (Auth erforderlich)</li>
+        <li><strong>POST</strong> /transactions - Transaktion erstellen (Auth erforderlich)</li>
+        <li><strong>DELETE</strong> /transactions/{id} - Transaktion löschen (Auth erforderlich)</li>
+        <li><strong>DELETE</strong> /transactions - Alle Transaktionen löschen (Auth erforderlich)</li>
+    </ul>
+    
+    <h2>Summary</h2>
+    <ul>
+        <li><strong>GET</strong> <a href="/summary/balance">/summary/balance</a> - Finanzübersicht (Auth erforderlich)</li>
+    </ul>
+    
+    <h2>Debug (nur für Entwicklung)</h2>
+    <ul>
+        <li><strong>GET</strong> <a href="/debug/all">/debug/all</a> - Alle Daten anzeigen</li>
+    </ul>
+    
+    <hr>
+    
+    <h3>Frontend Links:</h3>
+    <ul>
+        <li>Lokal: <a href="http://localhost:5173/">http://localhost:5173/</a></li>
+        <li>Production: <a href="https://frontend-7vbb.onrender.com">https://frontend-7vbb.onrender.com</a></li>
+    </ul>
+</body>
+</html>

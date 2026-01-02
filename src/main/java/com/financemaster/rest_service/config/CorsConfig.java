@@ -6,7 +6,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class corsConfig implements WebMvcConfigurer {
+public class CorsConfig implements WebMvcConfigurer {
 
     @Value("${frontend.url:${FRONTEND_URL:}}")
     private String frontendUrl;
@@ -14,8 +14,8 @@ public class corsConfig implements WebMvcConfigurer {
     @Override
     @SuppressWarnings("null")
     public void addCorsMappings(CorsRegistry registry) {
-    final String[] allowedOrigins = (frontendUrl == null || frontendUrl.isBlank())
-        ? new String[] {"http://localhost:5173"}
+    var allowedOrigins = (frontendUrl == null || frontendUrl.isBlank())
+        ? new String[] {"http://localhost:5173", "http://localhost:5174"}
         : frontendUrl.split("\\s*,\\s*");
 
     registry.addMapping("/**")
