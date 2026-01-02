@@ -6,8 +6,8 @@ WORKDIR /home/gradle/src
 COPY --chown=gradle:gradle build.gradle settings.gradle ./
 COPY --chown=gradle:gradle gradle ./gradle
 
-# Download dependencies (cached layer)
-RUN gradle build --no-daemon || true
+# Download dependencies only (cached layer)
+RUN gradle dependencies --no-daemon || true
 
 # Copy source code
 COPY --chown=gradle:gradle . .
