@@ -14,9 +14,17 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     @SuppressWarnings("null")
     public void addCorsMappings(CorsRegistry registry) {
-    var allowedOrigins = (frontendUrl == null || frontendUrl.isBlank())
-        ? new String[] {"http://localhost:5173", "http://localhost:5174"}
-        : frontendUrl.split("\\s*,\\s*");
+    // Use FRONTEND_URL env var, or allow localhost in dev
+    String[] allowedOrigins;
+    if (frontendUrl != null && !frontendUrl.isBlank()) {
+        allowedOrigins = frontendUrl.split("\\s*,\\s*");
+    } else {
+        // Default for dev
+        allowedOrigins = new String[] {
+            "http://localhost:5173", 
+            "http://localhost:5174"
+        };
+    }
 
     registry.addMapping("/**")
         .allowedOriginPatterns(allowedOrigins)
