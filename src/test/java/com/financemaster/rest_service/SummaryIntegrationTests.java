@@ -114,6 +114,7 @@ class SummaryIntegrationTests {
 
     @Test
     void balanceSummaryWorks() throws Exception {
+        // Balance-Übersicht wird korrekt berechnet
         var data = setupTestData();
         var session = data.get("session");
         mockMvc.perform(get("/summary/balance").session((org.springframework.mock.web.MockHttpSession) session))
@@ -125,6 +126,7 @@ class SummaryIntegrationTests {
 
     @Test
     void balanceSummaryWithDateRangeFilter() throws Exception {
+        // Balance-Übersicht mit Datumsfilter funktioniert
         var data = setupTestData();
         var session = data.get("session");
         mockMvc.perform(get("/summary/balance")
@@ -139,6 +141,7 @@ class SummaryIntegrationTests {
 
     @Test
     void balanceSummaryWithCategoryFilter() throws Exception {
+        // Balance-Übersicht mit Kategoriefilter funktioniert
         var data = setupTestData();
         var session = data.get("session");
         Long foodCatId = (Long) data.get("foodCatId");
@@ -154,6 +157,7 @@ class SummaryIntegrationTests {
 
     @Test
     void summaryByCategoryShowsBreakdown() throws Exception {
+        // Übersicht nach Kategorie zeigt Aufschlüsselung
         var data = setupTestData();
         var session = data.get("session");
         mockMvc.perform(get("/summary/by-category").session((org.springframework.mock.web.MockHttpSession) session))
@@ -164,6 +168,7 @@ class SummaryIntegrationTests {
 
     @Test
     void summaryByDateShowsMonthlyBreakdown() throws Exception {
+        // Übersicht nach Datum zeigt monatliche Aufschlüsselung
         var data = setupTestData();
         var session = data.get("session");
         mockMvc.perform(get("/summary/by-date").session((org.springframework.mock.web.MockHttpSession) session))
@@ -173,6 +178,7 @@ class SummaryIntegrationTests {
 
     @Test
     void summaryByDateWithDateRangeFilter() throws Exception {
+        // Übersicht nach Datum mit Datumsfilter funktioniert
         var data = setupTestData();
         var session = data.get("session");
         mockMvc.perform(get("/summary/by-date")
