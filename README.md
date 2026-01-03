@@ -120,7 +120,9 @@ npm test
 ### Finanzübersicht
 | Methode | Endpoint | Beschreibung | Auth erforderlich |
 |---------|----------|-------------|------------------|
-| GET | /summary/balance | Balance-Übersicht | Ja |
+| GET | /summary/balance | Balance-Übersicht mit optional Filterung nach Kategorie, Datum | Ja |
+| GET | /summary/by-category | Übersicht gruppiert nach Kategorien | Ja |
+| GET | /summary/by-date | Übersicht gruppiert nach Datum | Ja |
 
 ## Meilensteine
 
