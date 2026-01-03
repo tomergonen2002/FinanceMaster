@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.financemaster.rest_service.persistence.entity.Category;
 import com.financemaster.rest_service.persistence.entity.Transaction;
@@ -61,6 +62,7 @@ public class DataController {
     }
 
     @PostMapping("/categories")
+    @Transactional
     public Category createCategory(@RequestBody Category category, HttpServletRequest request) {
         Long userId = authService.requireSessionUserId(request);
         
@@ -75,6 +77,7 @@ public class DataController {
     }
 
     @PostMapping("/transactions")
+    @Transactional
     public Transaction createTransaction(@RequestBody Transaction transaction, HttpServletRequest request) {
         Long userId = authService.requireSessionUserId(request);
         
@@ -96,6 +99,7 @@ public class DataController {
     }
 
     @DeleteMapping("/categories")
+    @Transactional
     public void deleteCategoriesByUser(HttpServletRequest request) {
         Long userId = authService.requireSessionUserId(request);
         List<Transaction> transactions = transactionRepository.findByUserId(userId);
@@ -105,6 +109,7 @@ public class DataController {
     }
 
     @DeleteMapping("/categories/{id}")
+    @Transactional
     public void deleteCategory(@PathVariable("id") Long id, HttpServletRequest request) {
         Long userId = authService.requireSessionUserId(request);
         
@@ -125,6 +130,7 @@ public class DataController {
     }
 
     @DeleteMapping("/transactions")
+    @Transactional
     public void deleteTransactionsByUser(HttpServletRequest request) {
         Long userId = authService.requireSessionUserId(request);
         List<Transaction> transactions = transactionRepository.findByUserId(userId);
@@ -132,6 +138,7 @@ public class DataController {
     }
 
     @DeleteMapping("/transactions/{id}")
+    @Transactional
     public void deleteTransaction(@PathVariable("id") Long id, HttpServletRequest request) {
         Long userId = authService.requireSessionUserId(request);
         

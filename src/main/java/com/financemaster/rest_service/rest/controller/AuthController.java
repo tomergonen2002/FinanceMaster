@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.financemaster.rest_service.persistence.entity.User;
 import com.financemaster.rest_service.service.AuthService;
@@ -61,6 +62,7 @@ public class AuthController {
      * POST /auth/register - Neuen User registrieren
      */
     @PostMapping("/auth/register")
+    @Transactional
     public User register(@RequestBody Map<String, String> payload, HttpServletRequest request) {
         String name = payload.getOrDefault("name", "").trim();
         String email = payload.getOrDefault("email", "").trim();
