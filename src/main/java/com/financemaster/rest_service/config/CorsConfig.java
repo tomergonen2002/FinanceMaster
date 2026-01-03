@@ -14,24 +14,24 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     @SuppressWarnings("null")
     public void addCorsMappings(CorsRegistry registry) {
-    // Use FRONTEND_URL env var, or allow localhost in dev
-    String[] allowedOrigins;
-    if (frontendUrl != null && !frontendUrl.isBlank()) {
-        allowedOrigins = frontendUrl.split("\\s*,\\s*");
-    } else {
-        // Default for dev
-        allowedOrigins = new String[] {
-            "http://localhost:5173", 
-            "http://localhost:5174"
-        };
-    }
+        // Use FRONTEND_URL env var, or allow localhost in dev
+        String[] allowedOrigins;
+        if (frontendUrl != null && !frontendUrl.isBlank()) {
+            allowedOrigins = frontendUrl.split("\\s*,\\s*");
+        } else {
+            // Default for dev
+            allowedOrigins = new String[] {
+                "http://localhost:5173", 
+                "http://localhost:5174"
+            };
+        }
 
-    registry.addMapping("/**")
-        .allowedOriginPatterns(allowedOrigins)
-        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-        .allowedHeaders("*")
-        .exposedHeaders("Content-Disposition")
-        .allowCredentials(true)
-        .maxAge(3600);
+        registry.addMapping("/**")
+            .allowedOrigins(allowedOrigins)  // Changed from allowedOriginPatterns to allowedOrigins
+            .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+            .allowedHeaders("*")
+            .exposedHeaders("Content-Disposition")
+            .allowCredentials(true)
+            .maxAge(3600);
     }
 }
