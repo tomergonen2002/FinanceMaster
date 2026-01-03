@@ -81,4 +81,12 @@ public class AuthController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
     }
+
+    /**
+     * POST /auth/logout - User abmelden
+     */
+    @PostMapping("/auth/logout")
+    public void logout(HttpServletRequest request) {
+        authService.logout(request);
+    }
 }

@@ -70,15 +70,6 @@ class UserIntegrationTests {
     }
 
     @Test
-    void userRegistrationRequiresAllFields() throws Exception {
-        // Dokumentiert erwartetes Verhalten für unvollständige Daten
-        // Backend doesn't validate fields at controller level, 
-        // so missing fields cause internal errors
-        // This test is commented out as backend accepts incomplete data
-        // and relies on database constraints
-    }
-
-    @Test
     void getMeReturnsCurrentUser() throws Exception {
         // Aktuell eingeloggter User wird zurückgegeben
         User user = new User();
