@@ -23,33 +23,9 @@ public class SecurityConfig {
             // CSRF deaktivieren für REST API (SPA verwendet kein CSRF)
             .csrf(csrf -> csrf.disable())
             
-            // Authorization Rules
+            // Authorization Rules - ALLE Endpoints public
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/login", "/auth/register").permitAll() // Public endpoints
-                .anyRequest().authenticated() // Alle anderen Endpoints brauchen Auth
-            )
-            
-            // Exception Handling - 401 statt 403 für unauthenticated
-            .exceptionHandling(ex -> ex
-                .authenticationEntryPoint((request, response, authException) -> {
-                    response.sendError(401, "Unauthorized");
-                })
-            )
-            
-            // Session Management
-            .sessionManagement(session -> session
-                .sessionFixation().newSession() // Neue Session nach Login
-                .maximumSessions(1) // Max 1 Session pro User
-            )
-            
-            // Logout
-            .logout(logout -> logout
-                .logoutUrl("/auth/logout")
-                .logoutSuccessHandler((request, response, authentication) -> {
-                    response.setStatus(200);
-                })
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
+                .anyRequest().permitAll() // Alle Endpoints ohne Auth
             )
             
             // HTTP Basic Auth deaktivieren
