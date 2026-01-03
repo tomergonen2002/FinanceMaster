@@ -97,6 +97,20 @@ VITE_API_URL=http://localhost:8080 npm run dev
 
 Frontend läuft auf: http://localhost:5173
 
+## Deployment auf Render
+
+### Benötigte Umgebungsvariablen (Backend Service)
+
+```
+DB_NAME=financemaster_database
+DB_PASSWORD=<your-postgres-password>
+FRONTEND_URL=https://frontend-7vbb.onrender.com
+```
+
+- **DB_NAME**: Name der PostgreSQL-Datenbank
+- **DB_PASSWORD**: Passwort für PostgreSQL-User
+- **FRONTEND_URL**: URL des Frontend-Services für CORS-Konfiguration (wichtig für Cross-Domain-Authentication)
+
 ### Tests ausführen
 
 **Backend - Alle Tests**:

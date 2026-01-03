@@ -1,6 +1,10 @@
 package com.financemaster.rest_service.rest.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,12 +17,13 @@ import com.financemaster.rest_service.exception.EntityNotFoundException;
 import com.financemaster.rest_service.exception.InvalidInputException;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
+import java.util.Collections;
 import java.util.Map;
 
 /**
- * REST Controller für Authentifizierung
- * Delegiert Business Logic an AuthService
+ * REST Controller für Authentifizierung mit Spring Security
  */
 @RestController
 public class AuthController {
@@ -36,20 +41,32 @@ public class AuthController {
     public User login(@RequestBody Map<String, String> payload, HttpServletRequest request) {
         String email = payload.getOrDefault("email", "").trim();
         String password = payload.getOrDefault("password", "");
+        
         try {
-            return authService.login(email, password, request);
+            User user = authService.login(email, password, request);
+            
+            // Spring Security Authentication erstellen
+            UsernamePasswordAuthenticationToken authToken = 
+                new UsernamePasswordAuthenticationToken(user.getId(), null, Collections.emptyList());
+            
+            SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+            securityContext.setAuthentication(authToken);
+            SecurityContextHolder.setContext(securityContext);
+            
+            // SecurityContext in Session speichern
+            HttpSession session = request.getSession(true);
+            session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
+            
+            return user;
         } catch (EntityNotFoundException | InvalidInputException ex) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
         }
     }
 
     /**
-     * POST /auth/logout - User abmelden
+     * POST /auth/logout - Handled by Spring Security
+     * Dieser Endpoint wird von Spring Security automatisch behandelt
      */
-    @PostMapping("/auth/logout")
-    public void logout(HttpServletRequest request) {
-        authService.logout(request);
-    }
 
     /**
      * GET /auth/me - Aktuellen User abrufen
@@ -72,9 +89,21 @@ public class AuthController {
         String name = payload.getOrDefault("name", "").trim();
         String email = payload.getOrDefault("email", "").trim();
         String password = payload.getOrDefault("password", "");
+        
         try {
             User user = authService.register(name, email, password);
-            authService.login(email, password, request);
+            
+            // Automatisch einloggen nach Registrierung
+            UsernamePasswordAuthenticationToken authToken = 
+                new UsernamePasswordAuthenticationToken(user.getId(), null, Collections.emptyList());
+            
+            SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+            securityContext.setAuthentication(authToken);
+            SecurityContextHolder.setContext(securityContext);
+            
+            HttpSession session = request.getSession(true);
+            session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
+            
             user.setPassword(null);
             return user;
         } catch (InvalidInputException ex) {
