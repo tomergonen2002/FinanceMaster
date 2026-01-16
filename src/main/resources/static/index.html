@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinanceMaster API Dokumentation</title>
+</head>
+<body>
+
+    <h1>FinanceMaster API</h1>
+    
+    <hr>
+
+    <h3>Frontend Zugang:</h3>
+    <ul>
+        <li>
+            <strong>Live (Production):</strong> <a href="https://frontend-7vbb.onrender.com" target="_blank">https://frontend-7vbb.onrender.com</a>
+        </li>
+        <li>
+            <strong>Lokal (Dev):</strong> <a href="http://localhost:5173/" target="_blank">http://localhost:5173/</a>
+        </li>
+    </ul>
+
+    <hr>
+
+    <h2>1. Authentication & Session</h2>
+    <ul>
+        <li>
+            <strong>POST /auth/register</strong><br>
+            Neuen Benutzer registrieren.<br>
+        </li>
+        <li>
+            <strong>POST /auth/login</strong><br>
+            Anmelden (Setzt HttpOnly Session Cookie).<br>
+        </li>
+        <li>
+            <strong>GET <a href="/auth/me">/auth/me</a></strong><br>
+            Prüft, ob eine Session aktiv ist und gibt den User zurück.
+        </li>
+        <li>
+            <strong>POST /auth/logout</strong><br>
+            Beendet die Session serverseitig.
+        </li>
+    </ul>
+    
+    <h2>2. Categories</h2>
+    <ul>
+        <li>
+            <strong>GET <a href="/categories">/categories</a></strong><br>
+            Lädt alle Kategorien des angemeldeten Benutzers.
+        </li>
+        <li>
+            <strong>POST /categories</strong><br>
+            Erstellt eine neue Kategorie.<br>
+        </li>
+        <li>
+            <strong>DELETE /categories/{id}</strong><br>
+            Löscht eine Kategorie (nur wenn keine Transaktionen verknüpft sind).
+        </li>
+    </ul>
+    
+    <h2>3. Transactions (Filter)</h2>
+    <ul>
+        <li>
+            <strong>GET <a href="/transactions">/transactions</a></strong><br>
+            Lädt die Transaktionsliste. Unterstützt Filterung.<br>
+            <p><strong>Query Parameter (Optional):</strong></p>
+            <ul>
+                <li><code>?categoryId=1</code> (Filtert nach einer Kategorie-ID)</li>
+                <li><code>?from=2025-01-01</code> (Startdatum, Format YYYY-MM-DD)</li>
+                <li><code>?to=2025-01-31</code> (Enddatum, Format YYYY-MM-DD)</li>
+            </ul>
+        </li>
+        <li>
+            <strong>POST /transactions</strong><br>
+            Erstellt eine neue Einnahme oder Ausgabe.<br>
+        </li>
+        <li>
+            <strong>DELETE /transactions/{id}</strong><br>
+            Löscht eine Transaktion anhand ihrer ID.
+        </li>
+    </ul>
+    
+    <h2>4. Summary & Dashboard</h2>
+    <ul>
+        <li>
+            <strong>GET <a href="/transactions/summary/balance">/transactions/summary/balance</a></strong><br>
+            Liefert Summen für Einnahmen, Ausgaben und die Bilanz.
+            <p>Unterstützt dieselben Filter wie die Liste (categoryId, from, to).</p>
+        </li>
+    </ul>
+
+</body>
+</html>
