@@ -213,3 +213,7 @@ Um die Anwendung zu testen, ist folgender Workaround nötig:
 Benötigte Umgebungsvariablen:
 - `DB_NAME`, `DB_PASSWORD`, `DB_USER`
 - `FRONTEND_URL` (für CORS)
+
+### KI-Einsatz
+
+Wir haben im Rahmen des Projekts KI-Tools wie GitHub Copilot und Gemini genutzt.
